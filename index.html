@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css"> 
+	
+	<script src="js/modernizr.js"></script> 
+  	
+	<title>Social Guard</title>
+</head>
+<body>
+
+<header>
+	<nav class="cd-stretchy-nav">
+		<a class="cd-nav-trigger" href="#0">
+			Menu
+			<span aria-hidden="true"></span>
+		</a>
+
+		<ul>
+			<li><a href="#0" class="active"><span>Rate</span></a></li>
+			<li><a href="output.php"><span>Review</span></a></li>
+			<li><a href="https://form.jotform.me/72508074798468"><span>Feedback</span></a></li>
+			<li hidden><a href="#0"><span>About Us</span></a></li>
+			<li><a href="about.html"><span>About Us</span></a></li>
+		</ul>
+
+		<span aria-hidden="true" class="stretchy-nav-bg"></span>
+
+	</nav>
+</header>
+
+<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="map"></div>
+    <script>
+
+
+
+
+
+      var lat=0;
+      var lon=0;
+var a=0;
+      var markerArray=[];
+      var i=0;
+      var a=0;
+
+      function initAutocomplete() {
+                
+        var mapCanvas = document.getElementById("map");
+        var myCenter = new google.maps.LatLng(13.111580118251648,80.2606201171875);
+        var mapOptions = {center: myCenter, zoom: 5};
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+        var marker = new google.maps.Marker({position:myCenter});
+        markerArray.push(marker);
+
+        google.maps.event.addListener(map, 'click', function(event) {
+          placeMarker(map, event.latLng);
+        });
+
+
+
+function placeMarker(map, location) {
+ lat=location.lat();
+ lon=location.lng();
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+  
+  markerArray.push(marker);
+  markerArray[i++].setMap(null);
+  marker.setMap(map);
+
+  var infowindow = new google.maps.InfoWindow({
+    content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
+  });
+
+  infowindow.open(map,marker);
+  google.maps.event.addListener(marker,'click',function() {
+    b = prompt("Enter the type of crime : Accidents, Theft, Harrasment")
+    a = prompt("Enter 1 if you witnessed the crime, Else enter No");
+    document.getElementById("icrime").value = b;
+       document.getElementById("ilat").value = lat;
+  document.getElementById("ilon").value = lon;
+   document.getElementById("ivalue").value = a;
+   document.getElementById("ibutton").click();
+  });
+
+//    document.getElementById("ilat").value = lat;
+//   document.getElementById("ilon").value = lon;
+ //   document.getElementById("ivalue").value = a;
+  //  document.getElementById("ibutton").click();
+
+
+}
+
+
+
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+       
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1YgGMYSmzMO2tsxL_86X0L1tiMh-VC84&libraries=places&callback=initAutocomplete"
+         async defer></script>
+  
+  <form name='f1' action='receive.php' method="GET">
+    <input type="hidden" name="t1" value="123" id="ilat">
+    <input type="hidden" name="t2" value="234" id="ilon">
+    <input type="hidden" name="t3" value="345" id="ivalue">
+    <input type="hidden" name="t4" value="345" id="icrime">
+    <input type="submit" id="ibutton" hidden >
+    
+  </form>
+<main class="cd-main-content">
+	
+</main>
+
+	
+<script src="js/jquery-2.1.4.js"></script>
+<script src="js/main.js"></script> 
+
+</body>
+</html>
